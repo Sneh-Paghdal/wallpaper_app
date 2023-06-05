@@ -41,6 +41,8 @@ dependencies:
   flutter_staggered_grid_view:
   font_awesome_flutter:
   faker:
+  http:
+  flutter_file_downloader: ^1.1.2
 
 dev_dependencies:
   flutter_test:

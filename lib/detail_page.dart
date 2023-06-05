@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,6 +12,20 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    downloadFile(String url) async {
+      FileDownloader.downloadFile(url: url,
+          onDownloadCompleted: (val){
+            var snackBar = SnackBar(content: Text('File downloaded. Saved to: $val'),backgroundColor: Colors.green,);
+            print("Downloader");
+            showToast(context, "Downloaded successfully!", true, Colors.green, 100);
+          },
+          onDownloadError: (e){
+            var snackBar = SnackBar(content: Text('Error Occur due to: $e'),backgroundColor: Colors.red,);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            print("Failed");
+          }
+      );
+    }
     return Scaffold(
       body: Column(
         children: [
@@ -190,18 +205,23 @@ class DetailPage extends StatelessWidget {
                     const SizedBox(
                       width: 6,
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 17, vertical: 15),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        'Save',
-                        style: GoogleFonts.notoSans(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                    InkWell(
+                      onTap: (){
+                        downloadFile(imageUrl);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 17, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          'Save',
+                          style: GoogleFonts.notoSans(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -216,3 +236,19 @@ class DetailPage extends StatelessWidget {
     );
   }
 }
+
+void showToast(BuildContext context,message,bool isBottomsheet,Color color,int height) {
+
+  ScaffoldMessenger.of(context).showSnackBar(
+
+    SnackBar(
+      duration: Duration(seconds: 1),
+      // margin: EdgeInsets.only(top: 100),
+      // margin: EdgeInsets.only(bottom: isBottomsheet == true ? MediaQuery.of(context).size.height-height : 20,left: 10,right: 10),
+      backgroundColor: color,
+      content: Text(message,style: TextStyle(color: Colors.white),),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
+
