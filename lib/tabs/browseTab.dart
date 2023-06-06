@@ -43,12 +43,12 @@ class _browseTabState extends State<browseTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getImages();
+    getImages();
   }
 
   Future<void> _refresh()async {
     await Future.delayed(Duration(seconds: 2),(){
-      // getImages();
+      getImages();
     });
   }
 
@@ -59,11 +59,11 @@ class _browseTabState extends State<browseTab> {
         horizontal: 12,
         vertical: 8,
       ),
-      child: MasonryGridView.count(
+      child: imageArr.length != 0 ? MasonryGridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        // itemCount: imageArr.length,
+        itemCount: imageArr.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
@@ -74,8 +74,8 @@ class _browseTabState extends State<browseTab> {
                     MaterialPageRoute(
                       builder: (context) => DetailPage(
                         imageUrl:
-                        // imageArr[index]['src']['original'],
-                        'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
+                        imageArr[index]['src']['original'],
+                        // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                       ),
                     ),
                   );
@@ -84,18 +84,18 @@ class _browseTabState extends State<browseTab> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
-                    imageUrl:
-                    // imageArr[index]['src']['original'],
-                    'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
+                    imageUrl: imageArr[index]['src']['original'],
+                    // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                     fit: BoxFit.cover,
                     placeholder: (context, url) => AspectRatio(
-                      aspectRatio: (800 + index) / ((index % 2 + 1) * 970),
-                      // aspectRatio:  imageArr[index]['width']/imageArr[index]['height'] ,
+                      // aspectRatio: (800 + index) / ((index % 2 + 1) * 970),
+                      aspectRatio:  imageArr[index]['width']/imageArr[index]['height'] ,
                       child: Container(
                         color: Colors.grey,
                       ),
                     ),
                   ),
+                  // child: Image.network(imageArr[index]['src']['original']),
                 ),
               ),
               const Align(
@@ -109,7 +109,7 @@ class _browseTabState extends State<browseTab> {
             ],
           );
         },
-      ),
+      ) : Container(child: Text("Loading",style: TextStyle(color: Colors.white),),),
     );
   }
 }

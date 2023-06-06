@@ -6,6 +6,7 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key, required this.imageUrl});
   final String imageUrl;
@@ -189,17 +190,22 @@ class DetailPage extends StatelessWidget {
                 const Icon(CupertinoIcons.heart_circle_fill),
                 Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 17, vertical: 15),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF1F1F1),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        'View',
-                        style: GoogleFonts.notoSans(
-                          fontWeight: FontWeight.w500,
+                    InkWell(
+                      onTap: (){
+
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 17, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F1F1),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          'Set Wallpaper',
+                          style: GoogleFonts.notoSans(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
