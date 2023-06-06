@@ -13,11 +13,12 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     downloadFile(String url) async {
+      print(url);
       FileDownloader.downloadFile(url: url,
           onDownloadCompleted: (val){
             var snackBar = SnackBar(content: Text('File downloaded. Saved to: $val'),backgroundColor: Colors.green,);
             print("Downloader");
-            showToast(context, "Downloaded successfully!", true, Colors.green, 100);
+            showToast(context, 'File downloaded. Saved to: $val', true, Colors.green, 100);
           },
           onDownloadError: (e){
             var snackBar = SnackBar(content: Text('Error Occur due to: $e'),backgroundColor: Colors.red,);
