@@ -109,17 +109,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetailPage(
-                                        imageUrl: imageArr[index]['src']['original'],
-                                        // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}'),
+                                        imageUrl:
+                                      // imageArr[index]['src']['original'],
+                                        'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}',
                                   ),
                                   ),
                                 );
+                                print('https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}');
                               },
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
-                                  imageUrl: imageArr[index]['src']['original'],
-                                  // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}',
+                                  imageUrl:
+                                  // imageArr[index]['src']['original'],
+                                  'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}',
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => AspectRatio(
                                     aspectRatio:
