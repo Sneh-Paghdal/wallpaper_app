@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallpaperapp/tabs/browseTab.dart';
+import 'package:wallpaperapp/tabs/searchTab.dart';
 import 'detailPage.dart';
 import '../constDetails.dart';
 
@@ -72,11 +73,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 controller: _tabController,
                 children: [
                   browseTab(),
-                  Center(
-                    child: Container(
-                      child: Text("Second Screen",style: TextStyle(color: contants.primaryFontColor),),
-                    ),
-                  )
+                  searchTab()
                 ],
               ),
             ),

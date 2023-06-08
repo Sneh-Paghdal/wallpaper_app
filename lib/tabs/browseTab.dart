@@ -44,6 +44,11 @@ class _browseTabState extends State<browseTab> {
     // TODO: implement initState
     super.initState();
     getImages();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      imageArr.forEach((e) {
+        precacheImage(NetworkImage(e['src']['original']), context);
+      });
+    });
   }
 
   Future<void> _refresh()async {
@@ -84,6 +89,7 @@ class _browseTabState extends State<browseTab> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
+                    fadeInDuration:Duration(milliseconds: 0),
                     imageUrl: imageArr[index]['src']['original'],
                     // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                     fit: BoxFit.cover,
