@@ -110,7 +110,7 @@ class _sliderSectionState extends State<sliderSection> {
                           )
                           .toList())
                   : Container(
-                      child: LinearProgressIndicator(),
+                      child: LinearProgressIndicator(backgroundColor: Colors.black,color: Colors.white,minHeight:6),
                     ),
               Column(
                 children: [
@@ -127,8 +127,9 @@ class _sliderSectionState extends State<sliderSection> {
                       // onChanged: onSearchTextChanged,
                       // focusNode: _focusNode,
                       decoration: InputDecoration(
+                        enabled: false,
                         contentPadding: EdgeInsets.only(top: 15,bottom: 10,right: 10),
-                        hintText: 'Search Products...',
+                        hintText: 'Search wallpaper...',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: InputBorder.none,
                         prefixIcon: IconButton(

@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wallpaperapp/constDetails.dart';
 class categorySection extends StatefulWidget {
   const categorySection({Key? key}) : super(key: key);
 
@@ -19,8 +19,7 @@ class _categorySectionState extends State<categorySection> {
 
   getImages() async {
     var headers = {
-      'Authorization':
-      'U35FeBRTdDYbSgBgCR9hRaeMvfdhKfOkkX9PPUGbq9v7IFnw7KFiiOPM'
+      'Authorization': contants.apiKey
     };
     var request1 = http.Request(
         'GET',
@@ -109,6 +108,7 @@ class _categorySectionState extends State<categorySection> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding:EdgeInsets.only(left: 10,right: 10),
       child: Column(
         children: [
           Center(
@@ -131,6 +131,7 @@ class _categorySectionState extends State<categorySection> {
                     Expanded(
                         child: Container(
                           decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white54,width:0.5),
                             image: sportImage.length != 0 ? new DecorationImage(image: new NetworkImage(sportImage[0]['src']["medium"]),
                                 fit: BoxFit.cover) : null,
                               color: Colors.white,
@@ -145,6 +146,7 @@ class _categorySectionState extends State<categorySection> {
                     Expanded(
                         child: Container(
                           decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white54,width:0.5),
                               image: natureImage.length != 0 ? new DecorationImage(image: new NetworkImage(natureImage[0]['src']["medium"]),
                                   fit: BoxFit.cover) : null,
                               color: Colors.white,
@@ -162,6 +164,7 @@ class _categorySectionState extends State<categorySection> {
                     Expanded(
                         child: Container(
                           decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white54,width:0.5),
                               image: marvelImage.length != 0 ? new DecorationImage(image: new NetworkImage(marvelImage[0]['src']["medium"]),
                                   fit: BoxFit.cover) : null,
                               color: Colors.white,
@@ -175,6 +178,7 @@ class _categorySectionState extends State<categorySection> {
                     Expanded(
                         child: Container(
                           decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white54,width:0.5),
                               image: artImage.length != 0 ? new DecorationImage(image: new NetworkImage(artImage[0]['src']["medium"]),
                                   fit: BoxFit.cover) : null,
                               color: Colors.white,

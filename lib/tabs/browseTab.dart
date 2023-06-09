@@ -18,24 +18,45 @@ class browseTab extends StatefulWidget {
 class _browseTabState extends State<browseTab> {
 
   List<dynamic> imageArr = [];
+  late ScrollController _scrollController;
+  final int maxLength = 10000;
+  bool isLoading = false;
+  bool hasMore = true;
+  int page = 1;
 
   getImages() async {
+
+    setState(() {
+      isLoading = true;
+    });
+
     var headers = {
-      'Authorization': 'U35FeBRTdDYbSgBgCR9hRaeMvfdhKfOkkX9PPUGbq9v7IFnw7KFiiOPM'
+      'Authorization': contants.apiKey
     };
-    var request = http.Request('GET', Uri.parse('https://api.pexels.com/v1/curated?per_page=50'));
+    var request = http.Request('GET', Uri.parse('https://api.pexels.com/v1/curated?per_page=10&page=${page}'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();
       var json = jsonDecode(responseBody);
+
+      for(final e  in json['photos']){
+        imageArr.add(e);
+      }
       setState(() {
-        imageArr = json['photos'];
+
+        isLoading = false;
+        page = page +1;
+        hasMore = imageArr.length < maxLength;
       });
       // print(imageArr);
     }
     else {
       print(response.reasonPhrase);
+
+      // setState(() {
+      //   isLoading = false;
+      // });
     }
   }
 
@@ -49,7 +70,25 @@ class _browseTabState extends State<browseTab> {
         precacheImage(NetworkImage(e['src']['original']), context);
       });
     });
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
+        if(hasMore){
+          getImages();
+        }
+      }
+    });
   }
+
+  @override
+  void dispose() {
+    // TODO: implement initState
+    _scrollController.dispose();
+    super.dispose();
+
+  }
+
+
 
   Future<void> _refresh()async {
     await Future.delayed(Duration(seconds: 2),(){
@@ -65,11 +104,22 @@ class _browseTabState extends State<browseTab> {
         vertical: 8,
       ),
       child: imageArr.length != 0 ? MasonryGridView.count(
+        controller: _scrollController,
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        itemCount: imageArr.length,
+        itemCount: imageArr.length + (hasMore? 1 : 0),
         itemBuilder: (context, index) {
+
+          if(index == imageArr.length){
+            return SizedBox(
+              width: 30,
+              height: 30,
+              child: FittedBox(child: CircularProgressIndicator(color: Colors.black,backgroundColor: Colors.white,strokeWidth: 6,),),
+            );
+          }
+
+
           return Column(
             children: [
               InkWell(
@@ -115,7 +165,7 @@ class _browseTabState extends State<browseTab> {
             ],
           );
         },
-      ) : Container(child: Text("Loading",style: TextStyle(color: Colors.white),),),
+      ) : Container(child: Center(child: CircularProgressIndicator(backgroundColor:Colors.white,color: Colors.black,strokeWidth:6)),),
     );
   }
 }

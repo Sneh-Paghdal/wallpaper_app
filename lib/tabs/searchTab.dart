@@ -4,7 +4,6 @@ import 'package:wallpaperapp/sections/categorySection.dart';
 import 'package:wallpaperapp/sections/sliderSection.dart';
 
 import '../sections/sliderSection2.dart';
-
 class searchTab extends StatefulWidget {
   const searchTab({Key? key}) : super(key: key);
 
