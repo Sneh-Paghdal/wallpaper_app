@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wallpaperapp/pages/searchPage.dart';
 
 class sliderSection extends StatefulWidget {
   const sliderSection({Key? key}) : super(key: key);
@@ -123,11 +124,13 @@ class _sliderSectionState extends State<sliderSection> {
                     margin: EdgeInsets.only(top: 20, left: 10, right: 10),
                     child: TextField(
                       cursorColor:Colors.black,
+                      onSubmitted: (value){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>searchPage(keyword: value,)));
+                      },
                       // controller: searchControl,
                       // onChanged: onSearchTextChanged,
                       // focusNode: _focusNode,
                       decoration: InputDecoration(
-                        enabled: false,
                         contentPadding: EdgeInsets.only(top: 15,bottom: 10,right: 10),
                         hintText: 'Search wallpaper...',
                         hintStyle: TextStyle(color: Colors.grey),

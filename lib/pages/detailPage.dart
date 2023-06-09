@@ -13,6 +13,9 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     downloadFile(String url) async {
       print(url);
       FileDownloader.downloadFile(url: url,
@@ -28,6 +31,8 @@ class DetailPage extends StatelessWidget {
           }
       );
     }
+
+
     return Scaffold(
       body: Column(
         children: [

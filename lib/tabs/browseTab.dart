@@ -65,11 +65,6 @@ class _browseTabState extends State<browseTab> {
     // TODO: implement initState
     super.initState();
     getImages();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      imageArr.forEach((e) {
-        precacheImage(NetworkImage(e['src']['original']), context);
-      });
-    });
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){

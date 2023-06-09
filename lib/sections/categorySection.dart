@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallpaperapp/constDetails.dart';
+import 'package:wallpaperapp/pages/searchPage.dart';
 class categorySection extends StatefulWidget {
   const categorySection({Key? key}) : super(key: key);
 
@@ -129,30 +130,39 @@ class _categorySectionState extends State<categorySection> {
                 Row(
                   children: [
                     Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white54,width:0.5),
-                            image: sportImage.length != 0 ? new DecorationImage(image: new NetworkImage(sportImage[0]['src']["medium"]),
-                                fit: BoxFit.cover) : null,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          height: 100,
-                          child: Center(child: Text("Sport",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>searchPage(keyword: "Sport")));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white54,width:0.5),
+                              image: sportImage.length != 0 ? new DecorationImage(image: new NetworkImage(sportImage[0]['src']["medium"]),
+                                  fit: BoxFit.cover) : null,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20)),
+                            height: 100,
+                            child: Center(child: Text("Sport",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),
+                          ),
                         )
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white54,width:0.5),
-                              image: natureImage.length != 0 ? new DecorationImage(image: new NetworkImage(natureImage[0]['src']["medium"]),
-                                  fit: BoxFit.cover) : null,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          height: 100,
-                          child: Center(child: Text("Nature aesthetic",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),)
+                        child: InkWell(onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>searchPage(keyword: "Nature aesthetic")));
+                        },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white54,width:0.5),
+                                image: natureImage.length != 0 ? new DecorationImage(image: new NetworkImage(natureImage[0]['src']["medium"]),
+                                    fit: BoxFit.cover) : null,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20)),
+                            height: 100,
+                            child: Center(child: Text("Nature aesthetic",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),),
+                        )
                     )
                   ],
                 ),
@@ -162,29 +172,39 @@ class _categorySectionState extends State<categorySection> {
                 Row(
                   children: [
                     Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white54,width:0.5),
-                              image: marvelImage.length != 0 ? new DecorationImage(image: new NetworkImage(marvelImage[0]['src']["medium"]),
-                                  fit: BoxFit.cover) : null,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          height: 100,
-                          child: Center(child: Text("Marvel",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),)
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>searchPage(keyword: "Marvel")));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white54,width:0.5),
+                                image: marvelImage.length != 0 ? new DecorationImage(image: new NetworkImage(marvelImage[0]['src']["medium"]),
+                                    fit: BoxFit.cover) : null,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20)),
+                            height: 100,
+                            child: Center(child: Text("Marvel",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),),
+                        )
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white54,width:0.5),
-                              image: artImage.length != 0 ? new DecorationImage(image: new NetworkImage(artImage[0]['src']["medium"]),
-                                  fit: BoxFit.cover) : null,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          height: 100,
-                          child: Center(child: Text("Art",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),)
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>searchPage(keyword: "Art")));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white54,width:0.5),
+                                image: artImage.length != 0 ? new DecorationImage(image: new NetworkImage(artImage[0]['src']["medium"]),
+                                    fit: BoxFit.cover) : null,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20)),
+                            height: 100,
+                            child: Center(child: Text("Art",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.white),)),),
+                        )
                     )
                   ],
                 )
