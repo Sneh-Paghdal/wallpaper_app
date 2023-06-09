@@ -1,18 +1,43 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 
-class DetailPage extends StatelessWidget {
-  const DetailPage({super.key, required this.imageUrl});
+class DetailPage extends StatefulWidget {
+  const DetailPage({super.key, required this.imageUrl, required this.photographer, required this.photographerUrl});
   final String imageUrl;
+  final String photographer;
+  final String photographerUrl;
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  shareImage(imageUrl) async {
+    final url = Uri.parse(imageUrl);
+    final res = await http.get(url);
+    final bytes = res.bodyBytes;
+    final temp = await getTemporaryDirectory();
+    final path = '${temp.path}/image.jpg';
+    print(path);
+    File(path).writeAsBytesSync(bytes);
+    await Share.shareWithResult("ABC is BCD");
+    // await Share.shareFiles([path],text: "",subject: "");
+  }
 
   @override
   Widget build(BuildContext context) {
+
     downloadFile(String url) async {
       print(url);
       FileDownloader.downloadFile(url: url,
@@ -28,6 +53,16 @@ class DetailPage extends StatelessWidget {
           }
       );
     }
+
+    Future<void> _launchInBrowser(Uri url) async {
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      )) {
+        throw Exception('Could not launch $url');
+      }
+    }
+
     return Scaffold(
       body: Column(
         children: [
@@ -35,7 +70,7 @@ class DetailPage extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: CachedNetworkImageProvider(imageUrl),
+                  image: CachedNetworkImageProvider(widget.imageUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -66,7 +101,7 @@ class DetailPage extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return SizedBox(
-                                    height: 330,
+                                    height: 200,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 16),
@@ -92,57 +127,56 @@ class DetailPage extends StatelessWidget {
                                           const SizedBox(
                                             height: 30,
                                           ),
-                                          Text(
-                                            'Follow ${Faker().internet.userName()}',
-                                            style: GoogleFonts.notoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
+                                          InkWell(
+                                            onTap: () {
+                                              _launchInBrowser(
+                                                Uri.parse(widget.photographerUrl)
+                                              );
+                                            },
+                                            child: Text(
+                                              'Clicked by ${widget.photographer}',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.notoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(
                                             height: 15,
                                           ),
-                                          Text(
-                                            'Copy link',
-                                            style: GoogleFonts.notoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
+                                          InkWell(
+                                            onTap: () async {
+                                              try{
+                                                await Clipboard.setData(ClipboardData(text: widget.imageUrl));
+                                                showToast(context, "Copied!", false, Colors.black, 100);
+                                              }catch(e){
+                                                print(e);
+                                                showToast(context, "${e}", false, Colors.black, 100);
+                                              }
+                                            },
+                                            child: Text(
+                                              'Copy link',
+                                              style: GoogleFonts.notoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(
                                             height: 15,
                                           ),
-                                          Text(
-                                            'Download image',
-                                            style: GoogleFonts.notoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            'Hide Pin',
-                                            style: GoogleFonts.notoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                            'Report Pin',
-                                            style: GoogleFonts.notoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          Text(
-                                            "This goes against Pinterest's community guidelines",
-                                            style: GoogleFonts.notoSans(
-                                              fontSize: 14,
+                                          InkWell(
+                                            onTap: (){
+                                              downloadFile(widget.imageUrl);
+                                            },
+                                            child: Text(
+                                              'Download image',
+                                              style: GoogleFonts.notoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -214,7 +248,7 @@ class DetailPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: (){
-                        downloadFile(imageUrl);
+                        // downloadFile(imageUrl);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -234,7 +268,12 @@ class DetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Icon(Icons.share),
+                InkWell(
+                  onTap: (){
+                    print("Tapping Tapping");
+                    shareImage(widget.imageUrl);
+                  },
+                    child: const Icon(Icons.share)),
               ],
             ),
           ),
@@ -251,7 +290,7 @@ void showToast(BuildContext context,message,bool isBottomsheet,Color color,int h
     SnackBar(
       duration: Duration(seconds: 1),
       // margin: EdgeInsets.only(top: 100),
-      // margin: EdgeInsets.only(bottom: isBottomsheet == true ? MediaQuery.of(context).size.height-height : 20,left: 10,right: 10),
+      margin: EdgeInsets.only(bottom: isBottomsheet == false ? MediaQuery.of(context).size.height-height : 20,left: 10,right: 10),
       backgroundColor: color,
       content: Text(message,style: TextStyle(color: Colors.white),),
       behavior: SnackBarBehavior.floating,

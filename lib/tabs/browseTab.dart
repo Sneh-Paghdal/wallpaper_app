@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallpaperapp/constDetails.dart';
-
 import '../pages/detailPage.dart';
 
 class browseTab extends StatefulWidget {
@@ -65,11 +63,6 @@ class _browseTabState extends State<browseTab> {
     // TODO: implement initState
     super.initState();
     getImages();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      imageArr.forEach((e) {
-        precacheImage(NetworkImage(e['src']['original']), context);
-      });
-    });
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
@@ -130,6 +123,8 @@ class _browseTabState extends State<browseTab> {
                       builder: (context) => DetailPage(
                         imageUrl:
                         imageArr[index]['src']['original'],
+                        photographer: imageArr[index]['photographer'],
+                        photographerUrl: imageArr[index]['photographer_url'],
                         // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                       ),
                     ),
