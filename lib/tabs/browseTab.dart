@@ -1,8 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wallpaperapp/constDetails.dart';
 import '../pages/detailPage.dart';
 
@@ -81,7 +88,20 @@ class _browseTabState extends State<browseTab> {
 
   }
 
-
+  Future<void> _launchInBrowser(Uri url) async {
+    setState(() {
+      isLoading = true;
+    });
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   Future<void> _refresh()async {
     await Future.delayed(Duration(seconds: 2),(){
@@ -125,6 +145,7 @@ class _browseTabState extends State<browseTab> {
                         imageArr[index]['src']['original'],
                         photographer: imageArr[index]['photographer'],
                         photographerUrl: imageArr[index]['photographer_url'],
+                        potraitImagurl: imageArr[index]['src']['portrait'],
                         // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                       ),
                     ),
@@ -149,12 +170,132 @@ class _browseTabState extends State<browseTab> {
                   // child: Image.network(imageArr[index]['src']['original']),
                 ),
               ),
-              const Align(
+              Align(
                 alignment: Alignment.centerRight,
-                child: Icon(
-                  Icons.more_horiz,
-                  color: contants.primaryFontColor,
-                  size: 20,
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                              return SizedBox(
+                                height: 200,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets
+                                          .symmetric(
+                                          horizontal: 12, vertical: 16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                  FontAwesomeIcons
+                                                      .xmark),
+                                              const SizedBox(
+                                                width: 12,
+                                              ),
+                                              Text(
+                                                'Options',
+                                                style: GoogleFonts
+                                                    .notoSans(),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              _launchInBrowser(
+                                                  Uri.parse(imageArr[index]['photographer_url'])
+                                              );
+                                            },
+                                            child: Text(
+                                              'Clicked by ${imageArr[index]['photographer']}',
+                                              maxLines: 1,
+                                              overflow: TextOverflow
+                                                  .ellipsis,
+                                              style: GoogleFonts
+                                                  .notoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight
+                                                    .w500,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              try {
+                                                await Clipboard.setData(
+                                                    ClipboardData(
+                                                        text: imageArr[index]['src']['original']));
+                                                showToast(
+                                                    context, "Link Copied!",
+                                                    true, Colors.black,
+                                                    100);
+                                              } catch (e) {
+                                                print(e);
+                                                showToast(
+                                                    context, "${e}",
+                                                    false, Colors.black,
+                                                    100);
+                                              }
+                                            },
+                                            child: Text(
+                                              'Copy link',
+                                              style: GoogleFonts
+                                                  .notoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight
+                                                    .w500,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Share.share(imageArr[index]['src']['original']);
+                                            },
+                                            child: Text(
+                                              'Share link',
+                                              style: GoogleFonts
+                                                  .notoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight
+                                                    .w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.more_horiz,
+                    color: contants.primaryFontColor,
+                    size: 20,
+                  ),
                 ),
               )
             ],

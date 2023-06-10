@@ -13,22 +13,27 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({super.key, required this.imageUrl, required this.photographer, required this.photographerUrl});
+  const DetailPage({super.key, required this.imageUrl, required this.photographer, required this.photographerUrl, required this.potraitImagurl});
   final String imageUrl;
   final String photographer;
   final String photographerUrl;
+  final String potraitImagurl;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-
-  bool isLoading = false;
+    bool isFullScreen = false;
+    bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    return (isFullScreen == true) ? fullScareen() : miniMizedScreen();
+  }
 
+  Widget miniMizedScreen(){
+    
     shareImage(imageUrl) async {
       setState(() {
         isLoading = true;
@@ -55,12 +60,11 @@ class _DetailPageState extends State<DetailPage> {
       print(url);
       FileDownloader.downloadFile(url: url,
           onDownloadCompleted: (val){
-            var snackBar = SnackBar(content: Text('File downloaded. Saved to Downloads'),backgroundColor: Colors.green,);
             print("Downloader");
             setState(() {
               isLoading = false;
             });
-            showToast(context, 'File downloaded. Saved to: $val', false, Colors.green, 150);
+            showToast(context, 'Image Downloaded in downloads', true, Colors.black, 100);
           },
           onDownloadError: (e){
             var snackBar = SnackBar(content: Text('Error Occur due to: $e'),backgroundColor: Colors.red,);
@@ -96,6 +100,7 @@ class _DetailPageState extends State<DetailPage> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(widget.imageUrl),
+                  // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.8), BlendMode.screen),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -126,130 +131,120 @@ class _DetailPageState extends State<DetailPage> {
                                 context: context,
                                 builder: (context) {
                                   return StatefulBuilder(
-                                    builder: (BuildContext context, StateSetter setState) {
-                                      return SizedBox(
-                                        height: 200,
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(left: 15,
-                                                  right: 15,
-                                                  top: 0.5),
-                                              child: (isLoading == true)
-                                                  ? LinearProgressIndicator(
-                                                backgroundColor: Colors.white,
-                                                valueColor: AlwaysStoppedAnimation(
-                                                    Colors.red),
-                                                minHeight: 3,
-                                              )
-                                                  : Container(height: 3,),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets
-                                                  .symmetric(
-                                                  horizontal: 12, vertical: 16),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                    children: [
-                                                      const Icon(
-                                                          FontAwesomeIcons
-                                                              .xmark),
-                                                      const SizedBox(
-                                                        width: 12,
-                                                      ),
-                                                      Text(
-                                                        'Options',
+                                      builder: (BuildContext context, StateSetter setState) {
+                                        return SizedBox(
+                                          height: 200,
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                    horizontal: 12, vertical: 16),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                      children: [
+                                                        const Icon(
+                                                            FontAwesomeIcons
+                                                                .xmark),
+                                                        const SizedBox(
+                                                          width: 12,
+                                                        ),
+                                                        Text(
+                                                          'Options',
+                                                          style: GoogleFonts
+                                                              .notoSans(),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        _launchInBrowser(
+                                                            Uri.parse(widget
+                                                                .photographerUrl)
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        'Clicked by ${widget
+                                                            .photographer}',
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: GoogleFonts
-                                                            .notoSans(),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _launchInBrowser(
-                                                          Uri.parse(widget
-                                                              .photographerUrl)
-                                                      );
-                                                    },
-                                                    child: Text(
-                                                      'Clicked by ${widget
-                                                          .photographer}',
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                      style: GoogleFonts
-                                                          .notoSans(
-                                                        fontSize: 18,
-                                                        fontWeight: FontWeight
-                                                            .w500,
+                                                            .notoSans(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight
+                                                              .w500,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      try {
-                                                        await Clipboard.setData(
-                                                            ClipboardData(
-                                                                text: widget
-                                                                    .imageUrl));
-                                                        showToast(
-                                                            context, "Copied!",
-                                                            false, Colors.black,
-                                                            100);
-                                                      } catch (e) {
-                                                        print(e);
-                                                        showToast(
-                                                            context, "${e}",
-                                                            false, Colors.black,
-                                                            100);
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      'Copy link',
-                                                      style: GoogleFonts
-                                                          .notoSans(
-                                                        fontSize: 18,
-                                                        fontWeight: FontWeight
-                                                            .w500,
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        Navigator.pop(context);
+                                                        try {
+                                                          await Clipboard.setData(
+                                                              ClipboardData(
+                                                                  text: widget
+                                                                      .imageUrl));
+                                                          showToast(
+                                                              context, "Link Copied!",
+                                                              true, Colors.black,
+                                                              100);
+                                                        } catch (e) {
+                                                          print(e);
+                                                          showToast(
+                                                              context, "${e}",
+                                                              false, Colors.black,
+                                                              100);
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        'Copy link',
+                                                        style: GoogleFonts
+                                                            .notoSans(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight
+                                                              .w500,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      downloadFile(
-                                                          widget.imageUrl);
-                                                    },
-                                                    child: Text(
-                                                      'Download image',
-                                                      style: GoogleFonts
-                                                          .notoSans(
-                                                        fontSize: 18,
-                                                        fontWeight: FontWeight
-                                                            .w500,
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        downloadFile(
+                                                            widget.potraitImagurl);
+                                                      },
+                                                      child: Text(
+                                                        'Download image',
+                                                        style: GoogleFonts
+                                                            .notoSans(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight
+                                                              .w500,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
+                                            ],
+                                          ),
+                                        );
+                                      }
                                   );
                                 },
                                 shape: RoundedRectangleBorder(
@@ -269,10 +264,15 @@ class _DetailPageState extends State<DetailPage> {
                         margin: EdgeInsets.only(bottom: 10),
                         child: InkWell(
                           onTap: (){
+                            setState(() {
+                              if(isFullScreen == false){
+                                isFullScreen = true;
+                              }
+                            });
                           },
                           child: CircleAvatar(
                             backgroundColor: Colors.black.withOpacity(0.8),
-                            child: const Icon(
+                            child: Icon(
                               CupertinoIcons.viewfinder,
                               color: Colors.white,
                             ),
@@ -290,11 +290,11 @@ class _DetailPageState extends State<DetailPage> {
             child: Column(
               children: [
                 Container(
-                  child: (isLoading == true) ? LinearProgressIndicator(
-                    backgroundColor: Colors.black,
-                    valueColor: AlwaysStoppedAnimation(Colors.red),
-                    minHeight: 3,
-                  ) : Container(height: 3,color: Colors.black,)
+                    child: (isLoading == true) ? LinearProgressIndicator(
+                      backgroundColor: Colors.black,
+                      valueColor: AlwaysStoppedAnimation(Colors.red),
+                      minHeight: 3,
+                    ) : Container(height: 3,color: Colors.black,)
                 ),
                 Container(
                   color: Colors.black,
@@ -312,7 +312,6 @@ class _DetailPageState extends State<DetailPage> {
                         children: [
                           InkWell(
                             onTap: (){
-
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -325,8 +324,8 @@ class _DetailPageState extends State<DetailPage> {
                               child: Text(
                                 'Set Wallpaper',
                                 style: GoogleFonts.notoSans(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white
                                 ),
                               ),
                             ),
@@ -357,9 +356,9 @@ class _DetailPageState extends State<DetailPage> {
                         ],
                       ),
                       InkWell(
-                        onTap: (){
-                          shareImage(widget.imageUrl);
-                        },
+                          onTap: (){
+                            shareImage(widget.imageUrl);
+                          },
                           child: const Icon(Icons.share,color: Colors.white,)),
                     ],
                   ),
@@ -371,6 +370,41 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
+
+  Widget fullScareen(){
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+              child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(widget.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+                padding: EdgeInsets.only(right: 20,bottom: 20),
+                alignment: Alignment.bottomRight,
+                child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      isFullScreen = false;
+                    });
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black.withOpacity(0.8),
+                    child: Icon(CupertinoIcons.arrow_down_right_arrow_up_left,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+          )
+          )
+        ],
+      ),
+    );
+  }
+
 }
 
 void showToast(BuildContext context,message,bool isBottomsheet,Color color,int height) {
