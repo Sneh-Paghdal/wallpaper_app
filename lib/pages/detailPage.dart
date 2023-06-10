@@ -265,11 +265,18 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        backgroundColor: Colors.white.withOpacity(0.8),
-                        child: const Icon(
-                          CupertinoIcons.viewfinder,
-                          color: Colors.black,
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: InkWell(
+                          onTap: (){
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.black.withOpacity(0.8),
+                            child: const Icon(
+                              CupertinoIcons.viewfinder,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       )
                     ],
@@ -284,12 +291,13 @@ class _DetailPageState extends State<DetailPage> {
               children: [
                 Container(
                   child: (isLoading == true) ? LinearProgressIndicator(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.black,
                     valueColor: AlwaysStoppedAnimation(Colors.red),
                     minHeight: 3,
-                  ) : Container(height: 3,)
+                  ) : Container(height: 3,color: Colors.black,)
                 ),
                 Container(
+                  color: Colors.black,
                   padding: const EdgeInsets.only(
                     top: 10,
                     bottom: 20,
@@ -299,7 +307,7 @@ class _DetailPageState extends State<DetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(CupertinoIcons.heart_circle_fill),
+                      const Icon(CupertinoIcons.heart_circle_fill,color: Colors.white,),
                       Row(
                         children: [
                           InkWell(
@@ -310,13 +318,15 @@ class _DetailPageState extends State<DetailPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 17, vertical: 15),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF1F1F1),
+                                // color: const Color(0xFFF1F1F1),
+                                color: Colors.grey.withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Text(
                                 'Set Wallpaper',
                                 style: GoogleFonts.notoSans(
                                   fontWeight: FontWeight.w500,
+                                  color: Colors.white
                                 ),
                               ),
                             ),
@@ -348,10 +358,9 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       InkWell(
                         onTap: (){
-                          print("Tapping Tapping");
                           shareImage(widget.imageUrl);
                         },
-                          child: const Icon(Icons.share)),
+                          child: const Icon(Icons.share,color: Colors.white,)),
                     ],
                   ),
                 ),
