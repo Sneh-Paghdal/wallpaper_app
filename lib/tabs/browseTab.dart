@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:animated_radial_menu/animated_radial_menu.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -146,11 +147,15 @@ class _browseTabState extends State<browseTab> {
                         photographer: imageArr[index]['photographer'],
                         photographerUrl: imageArr[index]['photographer_url'],
                         potraitImagurl: imageArr[index]['src']['portrait'],
+                        id: imageArr[index]['id'].toString(),
                         // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                       ),
                     ),
                   );
                   // print('https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}');
+                },
+                onLongPress: (){
+                  showCircularMenu(context);
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -193,9 +198,8 @@ class _browseTabState extends State<browseTab> {
                                             crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                             children: [
-                                              const Icon(
-                                                  FontAwesomeIcons
-                                                      .xmark),
+                                              Icon(
+                                                  Icons.close),
                                               const SizedBox(
                                                 width: 12,
                                               ),
@@ -305,4 +309,40 @@ class _browseTabState extends State<browseTab> {
     );
   }
 }
+
+void showCircularMenu(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: RadialMenu(
+          children : [
+            RadialButton(
+              icon: Icon(Icons.edit),
+              onPress: () {
+                // Handle edit action
+                Navigator.pop(context); // Close the menu
+              },
+            ),
+            RadialButton(
+              icon: Icon(Icons.share),
+              onPress: () {
+                // Handle share action
+                Navigator.pop(context); // Close the menu
+              },
+            ),
+            RadialButton(
+              icon: Icon(Icons.delete),
+              onPress: () {
+                // Handle delete action
+                Navigator.pop(context); // Close the menu
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 

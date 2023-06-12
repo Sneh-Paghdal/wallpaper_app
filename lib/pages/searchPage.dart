@@ -163,6 +163,7 @@ class _searchPageState extends State<searchPage> {
                           photographer: imageArr[index]['photographer'],
                           photographerUrl: imageArr[index]['photographer_url'],
                           potraitImagurl: imageArr[index]['src']['portrait'],
+                          id: imageArr[index]['id'].toString(),
                           // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                         ),
                       ),
