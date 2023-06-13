@@ -70,6 +70,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
             Expanded(
               child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
                 controller: _tabController,
                 children: [
                   browseTab(),

@@ -61,6 +61,7 @@ dependencies:
   flutter_file_downloader: ^1.1.2
   # shared prefs for local storage
   shared_preferences:
+  pie_menu: ^1.3.0
 
 dev_dependencies:
   flutter_test:
