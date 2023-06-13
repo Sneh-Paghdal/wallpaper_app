@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:animated_radial_menu/animated_radial_menu.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -154,9 +153,6 @@ class _browseTabState extends State<browseTab> {
                   );
                   // print('https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}');
                 },
-                onLongPress: (){
-                  showCircularMenu(context);
-                },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
@@ -308,41 +304,6 @@ class _browseTabState extends State<browseTab> {
       ) : Container(child: Center(child: CircularProgressIndicator(backgroundColor:Colors.white,color: Colors.black,strokeWidth:6)),),
     );
   }
-}
-
-void showCircularMenu(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: RadialMenu(
-          children : [
-            RadialButton(
-              icon: Icon(Icons.edit),
-              onPress: () {
-                // Handle edit action
-                Navigator.pop(context); // Close the menu
-              },
-            ),
-            RadialButton(
-              icon: Icon(Icons.share),
-              onPress: () {
-                // Handle share action
-                Navigator.pop(context); // Close the menu
-              },
-            ),
-            RadialButton(
-              icon: Icon(Icons.delete),
-              onPress: () {
-                // Handle delete action
-                Navigator.pop(context); // Close the menu
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
 }
 
 

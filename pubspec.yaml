@@ -61,7 +61,6 @@ dependencies:
   flutter_file_downloader: ^1.1.2
   # shared prefs for local storage
   shared_preferences:
-  animated_radial_menu: ^0.0.1
 
 dev_dependencies:
   flutter_test:
