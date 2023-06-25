@@ -136,7 +136,8 @@ class _favorite_pageState extends State<favorite_page> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(
-                        fadeInDuration:Duration(milliseconds: 0),
+                        fadeInDuration:Duration(milliseconds: 500),
+                        fadeOutDuration:Duration(milliseconds: 0),
                         imageUrl: savedList[index]['image'],
                         // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                         fit: BoxFit.cover,

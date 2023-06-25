@@ -36,6 +36,31 @@ class browseTab extends StatefulWidget {
 }
 
 class _browseTabState extends State<browseTab> {
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () { },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   List<dynamic> imageArr = [];
   late ScrollController _scrollController;
@@ -102,6 +127,7 @@ class _browseTabState extends State<browseTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getImages();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
@@ -111,6 +137,7 @@ class _browseTabState extends State<browseTab> {
         }
       }
     });
+    showAlertDialog(context);
   }
 
 
@@ -157,6 +184,10 @@ class _browseTabState extends State<browseTab> {
           vertical: 8,
         ),
         child: imageArr.length != 0 ? LiquidPullToRefresh(
+            // height:50,
+            // borderWidth:5,
+          color:Colors.black,
+          springAnimationDurationInMilliseconds:950,
           onRefresh: _refresh,
           showChildOpacityTransition : false,
           child: MasonryGridView.count(
@@ -262,7 +293,9 @@ class _browseTabState extends State<browseTab> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
-                          fadeInDuration:Duration(milliseconds: 0),
+
+                          fadeInDuration:Duration(milliseconds: 500),
+                          fadeOutDuration:Duration(milliseconds: 0),
                           imageUrl: imageArr[index]['src']['original'],
                           // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                           fit: BoxFit.cover,

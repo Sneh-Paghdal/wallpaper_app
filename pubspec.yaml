@@ -45,6 +45,7 @@ dependencies:
   cached_network_image:
   # Pinterest Like grid view
   flutter_staggered_grid_view:
+
   font_awesome_flutter:
   # http req/res
   http:
