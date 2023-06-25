@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallpaperapp/main_page_view.dart';
 import 'pages/mainPage.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFFE5002A),
         ),
       ),
-      home: const MainPage(),
+      home: const main_page_view(),
     );
   }
 }

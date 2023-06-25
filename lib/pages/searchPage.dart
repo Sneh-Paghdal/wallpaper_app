@@ -62,7 +62,6 @@ class _searchPageState extends State<searchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _scrollController = ScrollController();
     setState(() {
@@ -164,6 +163,8 @@ class _searchPageState extends State<searchPage> {
                           photographerUrl: imageArr[index]['photographer_url'],
                           potraitImagurl: imageArr[index]['src']['portrait'],
                           id: imageArr[index]['id'].toString(),
+                          width: imageArr[index]['width'],
+                          height: imageArr[index]['height'],
                           // 'https://picsum.photos/${800 + index}/${(index % 2 + 1) * 970}.jpg',
                         ),
                       ),

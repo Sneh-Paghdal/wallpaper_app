@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,12 +20,14 @@ import 'package:wallpaper/wallpaper.dart';
 
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({super.key, required this.imageUrl, required this.photographer, required this.photographerUrl, required this.potraitImagurl, required this.id});
+  const DetailPage({super.key, required this.imageUrl, required this.photographer, required this.photographerUrl, required this.potraitImagurl, required this.id, required this.width, required this.height});
   final String imageUrl;
   final String photographer;
   final String photographerUrl;
   final String potraitImagurl;
   final String id;
+  final int width;
+  final int height;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -70,7 +73,9 @@ class _DetailPageState extends State<DetailPage> {
       "image" : widget.imageUrl,
       "portraitImg" : widget.potraitImagurl,
       "photographer" : widget.photographer,
-      "photographer_url" : widget.photographerUrl
+      "photographer_url" : widget.photographerUrl,
+      "width" : widget.width,
+      "height" : widget.height
     };
     savedList.add(obj);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -347,7 +352,9 @@ class _DetailPageState extends State<DetailPage> {
           Expanded(
             child: GestureDetector(
               onDoubleTap: (){
-                saveImg();
+                if(isPhotoSaved == false){
+                  saveImg();
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
