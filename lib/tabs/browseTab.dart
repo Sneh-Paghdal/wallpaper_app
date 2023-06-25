@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pie_menu/pie_menu.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:share_whatsapp/share_whatsapp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wallpaperapp/constDetails.dart';
 import '../pages/detailPage.dart';
@@ -36,31 +37,6 @@ class browseTab extends StatefulWidget {
 }
 
 class _browseTabState extends State<browseTab> {
-  showAlertDialog(BuildContext context) {
-
-    // set up the button
-    Widget okButton = TextButton(
-      child: Text("OK"),
-      onPressed: () { },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("My title"),
-      content: Text("This is my message."),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 
   List<dynamic> imageArr = [];
   late ScrollController _scrollController;
@@ -123,21 +99,66 @@ class _browseTabState extends State<browseTab> {
     }
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    getImages();
-    _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
-        if(hasMore){
-          getImages();
+
+    tutoial();
+
+  }
+
+
+
+  tutoial() async {
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if(preferences.getBool("userIsOld") == true){
+
+      getImages();
+      _scrollController = ScrollController();
+      _scrollController.addListener(() {
+        if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
+          if(hasMore){
+            getImages();
+          }
         }
-      }
-    });
-    showAlertDialog(context);
+      });
+
+    }else{
+
+      showDialog(context: context,barrierDismissible: false, builder: (BuildContext context){
+        return WillPopScope(
+          onWillPop: ()=>Future.value(false),
+          child: AlertDialog(
+            title: Text("Swip right to watch favourite"),
+            content :Text("-------------->"),
+            actions: [
+              ElevatedButton(onPressed: (){
+                Navigator.pop(context,'cancel');
+                preferences.setBool("userIsOld",true);
+                getImages();
+                _scrollController = ScrollController();
+                _scrollController.addListener(() {
+                  if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
+                    if(hasMore){
+                      getImages();
+                    }
+                  }
+                });
+              }, child: Text("ok"))
+            ],
+          ),
+        );
+      });
+
+    }
+
+
+
   }
 
 

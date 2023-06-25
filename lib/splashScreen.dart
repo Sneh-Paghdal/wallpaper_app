@@ -20,7 +20,6 @@ class _spleshPageState extends State<spleshPage> {
   @override
   initState() {
     super.initState();
-
     checkInternetConnection();
   }
 
@@ -30,7 +29,11 @@ class _spleshPageState extends State<spleshPage> {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => main_page_view()));
+        Timer(Duration(seconds: 3),(){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => main_page_view()));
+        });
+
+
 
       }
       else {
@@ -91,14 +94,3 @@ class _spleshPageState extends State<spleshPage> {
 
 }
 
-void showToast(BuildContext context,message,bool isBottomsheet,Color color,int height) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      duration: Duration(seconds: 1),
-      margin: EdgeInsets.only(bottom: isBottomsheet == true ? MediaQuery.of(context).size.height-height : 20,left: 10,right: 10),
-      backgroundColor: color,
-      content: Text(message,style: TextStyle(color: Colors.white),),
-      behavior: SnackBarBehavior.floating,
-    ),
-  );
-}
