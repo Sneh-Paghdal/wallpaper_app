@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Wallpaper app',
+      title: 'Jasneh - HD, 4K Wallpapers',
       theme: ThemeData(
         primaryColor: const Color(0xFF767676),
         colorScheme: const ColorScheme.light(

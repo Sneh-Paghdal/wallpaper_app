@@ -15,11 +15,36 @@ class spleshPage extends StatefulWidget {
   State<spleshPage> createState() => _spleshPageState();
 }
 
-class _spleshPageState extends State<spleshPage> {
+class _spleshPageState extends State<spleshPage> with SingleTickerProviderStateMixin{
+
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(0.0, 1.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+    _controller.forward();
     checkInternetConnection();
   }
 
@@ -32,9 +57,6 @@ class _spleshPageState extends State<spleshPage> {
         Timer(Duration(seconds: 3),(){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => main_page_view()));
         });
-
-
-
       }
       else {
         // print("internet off");
@@ -84,11 +106,30 @@ class _spleshPageState extends State<spleshPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        // child: Text("School",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-          child: Text("splash")
+      backgroundColor: Colors.black,
+      bottomNavigationBar: Container(
+        height: 4,
+        width: 200,
+        margin: EdgeInsets.only(bottom: 30,left: 70,right: 70),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: LinearProgressIndicator(
+            backgroundColor: Color(0xFF684dea),
+            color: Color(0xFF3bdbe0),
+          ),
+        ),
       ),
+      body: Center(
+          child : Container(
+            width: MediaQuery.of(context).size.width,
+            child: SlideTransition(
+              position: _offsetAnimation,
+              child: FadeInImage(
+                placeholder: AssetImage('assets/images/splashLogo.png'),
+                image: AssetImage('assets/images/splashLogo.png'),
+              ),
+            ),
+          )),
     );
   }
 

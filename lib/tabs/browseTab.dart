@@ -133,24 +133,30 @@ class _browseTabState extends State<browseTab> {
       showDialog(context: context,barrierDismissible: false, builder: (BuildContext context){
         return WillPopScope(
           onWillPop: ()=>Future.value(false),
-          child: AlertDialog(
-            title: Text("Swip right to watch favourite"),
-            content :Text("-------------->"),
-            actions: [
-              ElevatedButton(onPressed: (){
-                Navigator.pop(context,'cancel');
-                preferences.setBool("userIsOld",true);
-                getImages();
-                _scrollController = ScrollController();
-                _scrollController.addListener(() {
-                  if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
-                    if(hasMore){
-                      getImages();
+          child: Theme(
+            data: ThemeData.dark(),
+            child: AlertDialog(
+              title: Text("Please swip right to watch favourite ->"),
+              actions: [
+                ElevatedButton(onPressed: (){
+                  Navigator.pop(context,'cancel');
+                  preferences.setBool("userIsOld",true);
+                  getImages();
+                  _scrollController = ScrollController();
+                  _scrollController.addListener(() {
+                    if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.95 && !isLoading ){
+                      if(hasMore){
+                        getImages();
+                      }
                     }
-                  }
-                });
-              }, child: Text("ok"))
-            ],
+                  });
+                },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red), // Set custom color
+                    ),
+                    child: Text("Ok"))
+              ],
+            ),
           ),
         );
       });
@@ -271,17 +277,9 @@ class _browseTabState extends State<browseTab> {
                     buttonTheme: PieButtonTheme(backgroundColor: Colors.black,iconColor: Colors.white),
                     buttonThemeHovered: PieButtonTheme(backgroundColor: Colors.red,iconColor: Colors.white),
                     tooltip: 'Share to whatsapp',
-                    onSelect: () async {
-                      // final url = Uri.parse(imageArr[index]['src']['original']);
-                      // final res = await http.get(url);
-                      // final bytes = res.bodyBytes;
-                      // final temp = await getTemporaryDirectory();
-                      // final path = '${temp.path}/image.jpg';
-                      // final file = await File(path);
-                      // final xFile = XFile(file.path);
-                      // if (file != null) {
-                      //   shareWhatsapp.share(text: "See this ", file: xFile);
-                      // }
+                    onSelect: () {
+                      showToast(context, "Please select whatsapp in this share list", false, Colors.black, 100);
+                      Share.share(imageArr[index]['src']['original']);
                     },
                     // onSelect: () =>  shareImageWP(imageArr[index]['src']['original']),
                     child: const FaIcon(FontAwesomeIcons.whatsapp),

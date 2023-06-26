@@ -7,7 +7,7 @@ project(runner LANGUAGES CXX)
 set(BINARY_NAME "wallpaperapp")
 # The unique GTK application identifier for this application. See:
 # https://wiki.gnome.org/HowDoI/ChooseApplicationID
-set(APPLICATION_ID "com.example.wallpaperapp")
+set(APPLICATION_ID "com.wallpaper.hdwallpaper.newwallpaer.livewallpaper.anime.chatgpt.marvelwallpaper.dcwallpaper.jasneh")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

@@ -1,9 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.wallpaper.hdwallpaper.newwallpaer.livewallpaper.anime.chatgpt.marvelwallpaper.dcwallpaper.jasneh"
+    >
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="wallpaperapp"
+        android:label="Jasneh - HD, 4K Wallpapers"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
